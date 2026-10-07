@@ -1,0 +1,60 @@
+Unofficial OpenVINO INT4 conversion of z-lab/Qwen3.5-4B-DFlash
+https://github.com/jmwrockon/qwen35-4b-dflash-openvino
+
+This work is a modified version of the model z-lab/Qwen3.5-4B-DFlash,
+revision 9a1996ccf887b79ab3af4fcbf8c1d1f4b5658bcf
+(https://huggingface.co/z-lab/Qwen3.5-4B-DFlash), a DFlash draft model for
+Qwen/Qwen3.5-4B that Z-Lab (https://z-lab.ai) publishes under the Apache
+License, Version 2.0. Its model card describes it as "a joint retrain from
+Z-Lab and Modal"; Modal (https://modal.com) publishes the same weights as
+modal-labs/Qwen3.5-4B-DFlash.
+
+DFlash is described in: Jian Chen, Yesheng Liang and Zhijian Liu,
+"DFlash: Block Diffusion for Flash Speculative Decoding",
+arXiv:2602.06036 (https://arxiv.org/abs/2602.06036).
+
+The base model is Qwen3.5-4B (https://huggingface.co/Qwen/Qwen3.5-4B) by the
+Qwen team, Alibaba Cloud, under the Apache License, Version 2.0
+(Copyright 2026 Alibaba Cloud).
+
+Neither z-lab/Qwen3.5-4B-DFlash nor Qwen/Qwen3.5-4B has a NOTICE file.
+This conversion is not affiliated with or endorsed by Z-Lab, Modal, the
+OpenVINO project or Intel, the Qwen team or Alibaba Cloud.
+
+
+Changes made (Apache License 2.0, section 4(b))
+-----------------------------------------------
+
+On 2026-10-07 the maintainer of this repository (GitHub: jmwrockon)
+converted the model from PyTorch safetensors (bfloat16) to OpenVINO IR, with
+the weights compressed to 4 bits (NNCF int4_asym, group size 128, all layers,
+no calibration data). The conversion used OpenVINO Model Server 2026.4.1's
+pull mode, which ran optimum-cli export openvino (optimum-intel 2.2.0) with
+openvino 2026.4.0, nncf 3.4.0 and transformers 5.5.4.
+
+Every model file here was written by that conversion:
+
+  openvino_model.xml, openvino_model.bin
+      The draft network as OpenVINO IR, its weights compressed from
+      bfloat16 to INT4. They replace the original model.safetensors.
+
+  config.json
+      The original's config.json as rewritten by the exporter: it adds
+      "_orig_attn_implementation" and sets "tie_word_embeddings" to false
+      and "transformers_version" to 5.5.4. The exporter also pointed
+      "auto_map" at its model patcher by a path on the converting machine;
+      that key was then removed by hand, so this config.json has no
+      "auto_map" (the original's named dflash.DFlashDraftModel).
+
+  generation_config.json, openvino_config.json
+      Written by the exporter.
+
+  tokenizer.json, tokenizer_config.json, openvino_tokenizer.xml,
+  openvino_tokenizer.bin, openvino_detokenizer.xml, openvino_detokenizer.bin
+      Written by the exporter. The original has no tokenizer files.
+
+README.md, NOTICE, SHA256SUMS, .gitattributes and .gitignore were written for
+this repository. LICENSE is the Apache License 2.0 as published at
+https://www.apache.org/licenses/LICENSE-2.0.txt, because the original
+repository has no LICENSE file of its own (its model card declares
+apache-2.0).

@@ -1,0 +1,20 @@
+{
+  "dtype": "",
+  "input_info": null,
+  "optimum_version": "2.3.0",
+  "output_attentions": false,
+  "quantization_config": {
+    "_dataset_kwargs": {},
+    "dataset": null,
+    "default_config": {
+      "quant_method": "default"
+    },
+    "ignored_scope": null,
+    "num_samples": null,
+    "processor": null,
+    "quantization_configs": {},
+    "tokenizer": "z-lab/Qwen3.5-4B-DFlash"
+  },
+  "save_onnx_model": false,
+  "transformers_version": "5.5.4"
+}

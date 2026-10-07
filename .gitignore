@@ -1,0 +1,2 @@
+# The weights are a release asset (GitHub blocks files over 100 MiB); download them next to these files.
+openvino_model.bin
